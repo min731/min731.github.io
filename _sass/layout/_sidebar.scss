@@ -17,8 +17,9 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
   overflow-y: auto;
   width: v.$sidebar-width;
   // background: var(--sidebar-bg);
-  background: url(/assets/img/background/snow.jpg);
-  background-size: auto;
+  background: url(/assets/img/background/tree.jpg);
+  // background-size: auto;
+  background-size: cover  ;
   background-position: center;
   border-right: 1px solid var(--sidebar-border-color);
 
@@ -110,6 +111,9 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     margin-bottom: 0.5rem;
     width: fit-content;
     color: var(--site-title-color);
+    // background-color: rgba(255, 255, 255, 0.9);  // 흰색 배경 추가
+    // padding: 0.5rem 1rem;  // 패딩 추가
+    // border-radius: 0.75rem;  // 모서리 둥글게
   }
 
   .site-subtitle {
@@ -121,6 +125,10 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    // background-color: rgba(255, 255, 255, 0.8);  // 흰색 배경 추가
+    // padding: 0.3rem 0.8rem;  // 패딩 추가
+    // border-radius: 0.5rem;  // 모서리 둥글게
+    // display: inline-block;  // 텍스트 길이만큼만 배경 적용
   }
 
   ul {
@@ -143,6 +151,7 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
         align-items: center;
         border-radius: 0.75rem;
         font-weight: 600;
+        background-color: rgba(255, 255, 255, 0.9);  // 흰색 배경 추가
 
         &:hover {
           background-color: var(--sidebar-hover-bg);
