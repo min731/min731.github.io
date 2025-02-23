@@ -187,12 +187,12 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
   }
 
   .sidebar-bottom {
-    display: flex;  // 추가
+    // display: flex;  // 추가
     justify-content: center;  // 추가
     align-items: center;  // 추가
-    width: 100%;  // 추가
+    // width: 100%;  // 추가
     padding-left: 2rem;
-    padding-right: 1rem;
+    padding-right: 2rem;
     margin-bottom: 1.5rem;
 
     @include bp.xxxl {
