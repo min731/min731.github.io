@@ -1,20 +1,19 @@
 ---
 title: "제목"
-author:
-  name: 임정민
-  link: https://github.com/min731
+# author:
+#   name: Joung min Lim
+#   link: https://github.com/min731
 date: 2025-00-00 00:00:00 +0900
 categories: [상위 카테고리,하위 카테고리]
 tags: [태그1, 태그2]
+description: "포스트 내용을 정확히 요약한 20자 내외의 설명"
+image: /assets/img/posts/snow.jpg # 대표 이미지
 ---
-# 제목1
-* 내용1
-## 제목2
-* [네이버](https://www.naver.com)
-* [구글](https://www.google.com)
-### 제목3
+# 주제
+## 큰 contents
 ```python
 import torch
 ```
-* 내용2
-* 파일명: YYYY-MM-DD-PAGENAME.md
+### 작은 contents.
+[네이버](https://www.naver.com)
+[구글](https://www.google.com)

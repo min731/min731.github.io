@@ -6,7 +6,8 @@ theme: jekyll-theme-chirpy
 # The language of the webpage › http://www.lingoes.net/en/translator/langcode.htm
 # If it has the same name as one of the files in folder `_data/locales`, the layout language will also be changed,
 # otherwise, the layout language will use the default value of 'en'.
-lang: en
+lang: ko
+locale: ko_KR
 
 # Change to your timezone › https://kevinnovak.github.io/Time-Zone-Picker
 timezone: Asia/Seoul
@@ -16,10 +17,13 @@ timezone: Asia/Seoul
 
 title: min731 # the main title
 
-tagline: ML 근데 이제 Ops를 곁들인 # it will display as the subtitle
+tagline: MLOps Engineer | AI & Infra 개발 # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
-  A minimal, responsive and feature-rich Jekyll theme for technical writing.
+  # A minimal, responsive and feature-rich Jekyll theme for technical writing.
+  딥러닝 개념 정리, 최신 논문 리뷰 및 연구, MLOps 개발 내용을 공유하는 블로그입니다.
+  모델 서빙, Kubeflow, Keycloak, Kubernetes 관련 기술을 다룹니다.
+  또한 딥러닝 개념, 논문 리뷰, MLOps 개발 내용들을 메모하는 공간입니다.
 
 # Fill in the protocol & hostname for your site.
 # E.g. 'https://username.github.io', note that it does not end with a '/'.
@@ -39,14 +43,14 @@ social:
   links:
     # The first element serves as the copyright owner's link
     # - https://twitter.com/username # change to your Twitter homepage
-    - https://github.com/username # change to your GitHub homepage
+    - https://github.com/min731 # change to your GitHub homepage
     # Uncomment below to add more social links
     # - https://www.facebook.com/username
     # - https://www.linkedin.com/in/username
 
 # Site Verification Settings
 webmaster_verifications:
-  google: # fill in your Google verification code
+  google: 6HSOheNM4zjyirQNE-A3IspDSF35j3yFfY7MpMkkdec # fill in your Google verification code
   bing: # fill in your Bing verification code
   alexa: # fill in your Alexa verification code
   yandex: # fill in your Yandex verification code
@@ -181,6 +185,8 @@ defaults:
       toc: true # Display TOC column in posts.
       # DO NOT modify the following parameter unless you are confident enough
       # to update the code of all other post links in this project.
+      # author: Joung Min Lim
+      # image: /assets/img/profile-ljm.jpg
       permalink: /posts/:title/
   - scope:
       path: _drafts
@@ -224,3 +230,13 @@ jekyll-archives:
   permalinks:
     tag: /tags/:name/
     category: /categories/:name/
+
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+
+keywords: >-
+  MLOps, 딥러닝, Kubernetes, Kubeflow, Keycloak, AI, 모델 서빙, 인프라, 머신러닝, 인공지능
+
+# logo: assets/img/profile-ljm.jpg

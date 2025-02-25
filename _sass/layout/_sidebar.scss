@@ -129,6 +129,7 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     // padding: 0.3rem 0.8rem;  // 패딩 추가
     // border-radius: 0.5rem;  // 모서리 둥글게
     // display: inline-block;  // 텍스트 길이만큼만 배경 적용
+    font-style: normal !important;  // 기울어짐 방지
   }
 
   ul {
