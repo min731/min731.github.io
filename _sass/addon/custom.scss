@@ -1,0 +1,17 @@
+.center-image {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* 카드에 표시되는 썸네일 이미지 크기 조절 */
+.card-img-top {
+  height: 220px;  /* 원하는 높이로 조절 */
+  object-fit: cover;  /* 비율 유지하면서 영역 채우기 */
+}
+
+/* 포스트 상단에 표시되는 배너 이미지 크기 조절 */
+.post-featured-image {
+  max-height: 350px;  /* 원하는 높이로 조절 */
+  object-fit: contain;  /* 이미지 전체가 보이도록 설정 */
+}
