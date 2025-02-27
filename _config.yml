@@ -56,7 +56,6 @@ webmaster_verifications:
   yandex: # fill in your Yandex verification code
   baidu: # fill in your Baidu verification code
   facebook: # fill in your Facebook verification code
-  naver: e0e3370233db73d9802cde25571d78e8639bda56
 
 # ↑ --------------------------
 # The end of `jekyll-seo-tag` settings
