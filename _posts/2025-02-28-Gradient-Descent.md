@@ -40,6 +40,7 @@ toc: true
 - 은닉층 
 - 출력층 : 출력노드의 수 = 출력변수의 범주 개수(범주형), 출력 변수의 갯수(연속형)
 ![](https://velog.velcdn.com/images/min0731/post/173f8433-bdc5-427e-9278-6afd219b6df1/image.png)
+
 - MLP(Multi-Layer Perceptron) == ANN(Artifical Nerural Networks)
 
 ### 4. 선형 회귀 / 로지스틱 회귀 / 뉴럴 네트워크 비교
