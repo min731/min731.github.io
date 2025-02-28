@@ -10,8 +10,7 @@ categories: [AI | 딥러닝 개념, Gradient Descent]
 # categories: [Life | 일상 이야기, 와플먹으면서 공부하기]
 tags: [DeepLearning, RNN]
 description: ""
-# image: /assets/img/posts/DeepLearning.png # 대표 이미지
-# 가로 세로 비율 약 1.91:1 (예: 1200×628px)
+image: /assets/img/posts/resize/output/information-15-00517-g001.webp # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
 toc: true
 pin: true

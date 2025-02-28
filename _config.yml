@@ -17,7 +17,7 @@ timezone: Asia/Seoul
 
 title: min731 # the main title
 
-tagline: MLOps Engineer | AI & Infra 개발 # it will display as the subtitle
+tagline: MLOps Engineer | AI & Infra # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   # A minimal, responsive and feature-rich Jekyll theme for technical writing.
