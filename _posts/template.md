@@ -13,7 +13,7 @@ description: ""
 image: /assets/img/posts/resize/output/information-15-00517-g001.webp # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
 toc: true
-pin: true
+# pin: true
 ---
 >  *인용 알림
 ## 큰 contents
