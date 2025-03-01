@@ -9,7 +9,7 @@ categories: [AI | 딥러닝 개념, Concept]
 # categories: [MLOps | 인프라 개발, Kserve]
 # categories: [Life | 일상 이야기, 와플먹으면서 공부하기]
 tags: [DeepLearning, Neural Network, Cost Function, Gradient Descent]
-description: ""
+description: "뉴럴 네트워크(Neural Network), 비용 함수(Cost Function), 경사하강법(Gradient Descent)에 대해 자세히 알아봅시다."
 image: /assets/img/posts/resize/output/images.jpeg # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
 toc: true

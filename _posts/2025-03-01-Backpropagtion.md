@@ -9,7 +9,7 @@ categories: [AI | 딥러닝 개념, Concept]
 # categories: [MLOps | 인프라 개발, Kserve]
 # categories: [Life | 일상 이야기, 와플먹으면서 공부하기]
 tags: [DeepLearning, Backpropagation, Neural Network]
-description: ""
+description: "역전파 알고리즘(Backpropagation)을 수식으로 정리해봅시다."
 image: /assets/img/posts/resize/output/maxresdefault.jpg # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
 toc: true
