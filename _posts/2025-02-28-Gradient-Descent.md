@@ -4,7 +4,7 @@ title: "Neural Network / Cost Function / Gradient Descent"
 #   name: Joung min Lim
 #   link: https://github.com/min731
 date: 2025-02-28 00:00:00 +0900
-categories: [AI | 딥러닝 개념, Concept]
+categories: [AI | 딥러닝, Concept]
 # categories: [AI | 논문 리뷰, Attention is all you need]
 # categories: [MLOps | 인프라 개발, Kserve]
 # categories: [Life | 일상 이야기, 와플먹으면서 공부하기]

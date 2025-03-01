@@ -1,6 +1,8 @@
 # 예시:
 # feat(AI):
 # feat(MLOps):
+# feat(Life):
+# feat(STEM):
 # feat(Paper):
 # feat(auth): OAuth 2.0 로그인 기능 추가
 #
