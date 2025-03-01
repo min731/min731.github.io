@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://min731.github.io/
+Sitemap: https://min731.github.io/sitemap.xml
