@@ -4,10 +4,12 @@ title: "제목"
 #   name: Joung min Lim
 #   link: https://github.com/min731
 date: 2025-02-00 00:00:00 +0900
-categories: [AI | 딥러닝 개념, Gradient Descent]
+# categories: [AI | 딥러닝, Architecture]
+categories: [AI | 딥러닝, Concept]
 # categories: [AI | 논문 리뷰, Attention is all you need]
 # categories: [MLOps | 인프라 개발, Kserve]
 # categories: [Life | 일상 이야기, 와플먹으면서 공부하기]
+# categories: [STEM | 수학/통계, Statistics]
 tags: [DeepLearning, RNN]
 description: ""
 image: /assets/img/posts/resize/output/information-15-00517-g001.webp # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
