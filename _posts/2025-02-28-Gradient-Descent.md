@@ -17,7 +17,7 @@ toc: true
 ---
 
 <div align="center">
-  <strong>Image source: <a href="https://commons.wikimedia.org/wiki/File:Gradient_ascent_(surface).png">https://commons.wikimedia.org/wiki/File:Gradient_ascent_(surface).png</a> <br> (Public Domain)</strong>
+  <small>Source: <a href="https://commons.wikimedia.org/wiki/File:Gradient_ascent_(surface).png">https://commons.wikimedia.org/wiki/File:Gradient_ascent_(surface).png</a></small>
 </div>
 
 >  *본 게시글은 유튜브 ['김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 1 (구조, 비용함수, 경사하강법)](https://www.youtube.com/watch?v=YIgLpsJ-1J4) 자료를 참고한 점임을 알립니다.
@@ -61,7 +61,7 @@ $$
 <div align="center">
   <img src="https://velog.velcdn.com/images/min0731/post/3f2daeed-fc52-4ff6-a871-b90c80b28e55/image.png" alt="Image description" width="500">{: .center-image}
   <br>
-  <small>Image source: <a href="원본_링크">Source name</a></small>
+  <small>Source: <a href="https://iopscience.iop.org/article/10.1088/1757-899X/1087/1/012084">Performance analysis of mAlexnet by training option and activation function tuning on parking images</a></small>
 </div>
 
 ###  6. 비용 함수(Cost Function)
@@ -96,6 +96,7 @@ $$
 - $$w_{\tau}$$에 따라 $$w_{\tau+1}$$가 증가 혹은 감소
 
 > 참고 자료
-  
+
+- [https://commons.wikimedia.org/wiki/File:Gradient_ascent_(surface).png](https://commons.wikimedia.org/wiki/File:Gradient_ascent_(surface).png)
+- [https://iopscience.iop.org/article/10.1088/1757-899X/1087/1/012084](Performance analysis of mAlexnet by training option and activation function tuning on parking images)
 - ['김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 1 (구조, 비용함수, 경사하강법)](https://www.youtube.com/watch?v=YIgLpsJ-1J4)
-- [https://www.digitalocean.com/community/tutorials/intro-to-optimization-in-deep-learning-gradient-descent](https://www.digitalocean.com/community/tutorials/intro-to-optimization-in-deep-learning-gradient-descent)

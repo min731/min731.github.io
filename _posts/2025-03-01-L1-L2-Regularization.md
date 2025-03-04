@@ -16,6 +16,10 @@ toc: true
 # pin: true
 ---
 
+<div align="center">
+  <small>Source: <a href="https://commons.wikimedia.org/wiki/File:Regularization.jpg">https://commons.wikimedia.org/wiki/File:Regularization.jpg</a></small>
+</div>
+
 >  *본 게시글은 유튜브 ['혁펜하임 AI & 딥러닝 강의' 선대 2-4강. 벡터의 norm 쉬운 설명](https://www.youtube.com/watch?v=6B1dj6L0Xiw&t=363s)과 ['신박Ai' [Deep Learning 101] L1, L2 Regularization](https://www.youtube.com/watch?v=swYILd-M2Ks) 자료를 참고한 점임을 알립니다.
 
 ## Norm
@@ -236,5 +240,6 @@ $$
 
 > 참고 자료
 
+- [https://commons.wikimedia.org/wiki/File:Regularization.jpg](https://commons.wikimedia.org/wiki/File:Regularization.jpg)
 - ['혁펜하임 AI & 딥러닝 강의' 선대 2-4강. 벡터의 norm 쉬운 설명](https://www.youtube.com/watch?v=6B1dj6L0Xiw&t=363s)
 - ['신박Ai' [Deep Learning 101] L1, L2 Regularization](https://www.youtube.com/watch?v=swYILd-M2Ks)

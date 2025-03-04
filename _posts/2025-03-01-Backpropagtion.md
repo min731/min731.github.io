@@ -10,25 +10,36 @@ categories: [AI | 딥러닝, Concept]
 # categories: [Life | 일상 이야기, 와플먹으면서 공부하기]
 tags: [DeepLearning, Backpropagation, Neural Network]
 description: "역전파 알고리즘(Backpropagation)을 수식으로 정리해봅시다."
-image: /assets/img/posts/resize/output/maxresdefault.jpg # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
+image: assets/img/posts/resize/output/ArtificialNeuronModel_english.png # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
 toc: true
 # pin: true
 ---
 
->  *본 게시글은 유튜브 ['김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 2 (Backpropagation 알고리즘)](https://www.youtube.com/watch?v=8300noBbCRU&t=728s) 자료를 참고한 점임을 알립니다.
+<div align="center">
+  <small>Source: <a href="https://commons.wikimedia.org/wiki/File:ArtificialNeuronModel_english.png">https://commons.wikimedia.org/wiki/File:ArtificialNeuronModel_english.png</a></small>
+</div>
+
+
+>  *본 게시글은 유튜브 ['김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 2 (Backpropagation 알고리즘)](https://www.youtube.com/watch?v=8300noBbCRU) 자료를 참고한 점임을 알립니다.
 
 ## Neural Network
 
 
 ### 1. 전체 뉴럴 네트워크 정의
 ![](https://velog.velcdn.com/images/min0731/post/b86c24fe-23c4-4efc-8d83-3df720e75826/image.png)
+<div align="center">
+  <small>Source: <a href="https://www.youtube.com/watch?v=8300noBbCRU">'김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 2 (Backpropagation 알고리즘)</a></small>
+</div>
 
 - 한번에 바로 미분하기에는 복잡
 - 출력층과 은닉층, 은닉층과 입력층 단위로 구분
 
 ### 2. 출력층과 은닉층 사이
 ![](https://velog.velcdn.com/images/min0731/post/a4a36cd8-cd68-421d-bb7e-300c644b81d9/image.png)
+<div align="center">
+  <small>Source: <a href="https://www.youtube.com/watch?v=8300noBbCRU">'김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 2 (Backpropagation 알고리즘)</a></small>
+</div>
 
 - Forward 진행 과정
 <br>
@@ -53,6 +64,9 @@ $$
 $$
 
 ![](https://velog.velcdn.com/images/min0731/post/0c19eb73-d3af-425e-b614-d24673c33194/image.png)
+<div align="center">
+  <small>Source: <a href="https://www.youtube.com/watch?v=8300noBbCRU">'김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 2 (Backpropagation 알고리즘)</a></small>
+</div>
 
 - 위를 (단일 k에 대해) 자세히 전개하면
 
@@ -84,6 +98,9 @@ $$
 
 ### 3. 은닉층과 입력층 사이
 ![](https://velog.velcdn.com/images/min0731/post/03402921-6f89-4899-8875-7938149b4967/image.png)
+<div align="center">
+  <small>Source: <a href="https://www.youtube.com/watch?v=8300noBbCRU">'김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 2 (Backpropagation 알고리즘)</a></small>
+</div>
 
 - Forward 진행 과정
 $$
@@ -177,6 +194,9 @@ $$
 
 ### 4. 출력층과 은닉층 / 은닉층과 입력층 $$\Delta w$$ 정리
 ![](https://velog.velcdn.com/images/min0731/post/9555c6a8-4015-4324-a5a2-d1ebcdd2108e/image.png)
+<div align="center">
+  <small>Source: <a href="https://www.youtube.com/watch?v=8300noBbCRU">'김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 2 (Backpropagation 알고리즘)</a></small>
+</div>
 
 $$
 \Delta w_{kj} = -\alpha \frac{\partial E_n}{\partial w_{kj}}
@@ -187,6 +207,9 @@ $$
 $$
 
 ![](https://velog.velcdn.com/images/min0731/post/7eff305b-5e44-4354-b7b5-0b4da33d7da8/image.png)
+<div align="center">
+  <small>Source: <a href="https://www.youtube.com/watch?v=8300noBbCRU">'김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 2 (Backpropagation 알고리즘)</a></small>
+</div>
 
 $$
 \Delta w_{ji} = -\alpha \frac{\partial E_n}{\partial w_{ji}}
@@ -197,5 +220,6 @@ $$
 $$
 
 > 참고 자료
-  
+
+- [https://commons.wikimedia.org/wiki/File:ArtificialNeuronModel_english.png](https://commons.wikimedia.org/wiki/File:ArtificialNeuronModel_english.png)
 - ['김성범[ 교수 / 산업경영공학부 ]' [ 핵심 머신러닝 ]뉴럴네트워크모델 2 (Backpropagation 알고리즘)](https://www.youtube.com/watch?v=8300noBbCRU&t=728s)

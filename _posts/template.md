@@ -15,6 +15,11 @@ math: true
 toc: true
 # pin: true
 ---
+
+<div align="center">
+  <small>Source: <a href="https://commons.wikimedia.org/wiki/File:Recurrent_neural_network_unfold.svg">https://commons.wikimedia.org/wiki/File:Recurrent_neural_network_unfold.svg</a></small>
+</div>
+
 >  *인용 알림
 ## 큰 contents
 ![이미지 설명](/assets/img/posts/Paper.png){: .center-image}
