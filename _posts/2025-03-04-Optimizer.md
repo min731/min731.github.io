@@ -9,15 +9,15 @@ categories: [AI | 딥러닝 , Concept]
 # categories: [MLOps | 인프라 개발, Kserve]
 # categories: [Life | 일상 이야기, 와플먹으면서 공부하기]
 tags: [DeepLearning, Optimizer, SGD, AdaGrad, RMSProp, Momentum, Adam]
-description: "SGD(Stochastic Gradient Descent), AdaGrad(Adaptive Gradient Algorithm), RMSProp(Root Mean Square Propagation), Momentum, Adam(Adaptive Moment Estimation) 에 대해 알아봅시다."
-image: assets/img/posts/resize/output/optimizer.png # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
+description: "SGD(Stochastic Gradient Descent), AdaGrad(Adaptive Gradient Algorithm), RMSProp(Root Mean Square Propagation), Momentum, Adam(Adaptive Moment Estimation) Optimizer 에 대해 알아봅시다."
+image: assets/img/posts/resize/output/optimizer-1.png # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
 toc: true
 # pin: true
 ---
 
 <div align="center">
-  <small>Source: <a href="https://en.wikipedia.org/wiki/Stochastic_gradient_descent#/media/File:Optimizer_Animations_Birds-Eye.gif">https://en.wikipedia.org/wiki/Stochastic_gradient_descent#/media/File:Optimizer_Animations_Birds-Eye.gif</a></small>
+  <small>Source: <a href="https://arxiv.org/abs/1609.04747">https://arxiv.org/abs/1609.04747</a></small>
 </div>
 
 > ## SGD(Stochastic Gradient Descent)
