@@ -12,7 +12,7 @@ categories: [MLOps | 인프라 개발, Model Serving]
 # categories: [STEM | 수학/통계, Statistics]
 tags: [DeepLearning, MLOps, Kubeflow, Kserve]
 description: "쿠버네티스 상에서 AI 모델을 서빙할 수 있는 Kserve 플랫폼을 구축해봅시다."
-image: assets/img/posts/resize/output/kserve-architecture.png # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
+image: assets/img/posts/resize/output/kserve.png # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
 toc: true
 # pin: true
@@ -23,12 +23,6 @@ toc: true
 </div>
 
 ## KServe 설치
-
-![](assets/img/posts/resize/output/kserve.png){: width="400px"}
-
-<div align="center">
-  <small>Source: <a href="https://kserve.github.io/website/latest/">https://kserve.github.io/website/latest/</a></small>
-</div>
 
 ### 시작하기 전에 필요한 환경
 

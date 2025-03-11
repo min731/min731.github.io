@@ -12,7 +12,7 @@ categories: [MLOps | 인프라 개발, Model Serving]
 # categories: [STEM | 수학/통계, Statistics]
 tags: [DeepLearning, MLOps, Kubeflow, Kserve]
 description: "쿠버네티스 상에서 AI 모델을 서빙할 수 있는 Kserve에 대해 알아봅시다."
-image: assets/img/posts/resize/output/kserve-architecture.png # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
+image: assets/img/posts/resize/output/kserve.png # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
 toc: true
 # pin: true
@@ -22,18 +22,15 @@ toc: true
   <small>Source: <a href="https://kserve.github.io/website/latest/">https://kserve.github.io/website/latest/</a></small>
 </div>
 
-## KServe 설치
+### KServe란?
 
-![](assets/img/posts/resize/output/kserve.png){: width="400px"}
+KServe는 쿠버네티스(Kubernetes) 환경에서 AI 모델을 쉽고 효율적으로 배포하고 관리할 수 있게 해주는 오픈소스 플랫폼입니다. Python으로 개발한 머신러닝 또는 딥러닝 모델을 실제 서비스로 제공할 때 필요한 모든 복잡한 과정을 자동화해주는 도구입니다.
+
+![](assets/img/posts/resize/output/kserve-architecture.png){: width="600px"}
 
 <div align="center">
   <small>Source: <a href="https://kserve.github.io/website/latest/">https://kserve.github.io/website/latest/</a></small>
 </div>
-
-
-### KServe란?
-
-KServe는 쿠버네티스(Kubernetes) 환경에서 AI 모델을 쉽고 효율적으로 배포하고 관리할 수 있게 해주는 오픈소스 플랫폼입니다. Python으로 개발한 머신러닝 또는 딥러닝 모델을 실제 서비스로 제공할 때 필요한 모든 복잡한 과정을 자동화해주는 도구입니다.
 
 원래는 'KFServing'이라는 이름으로 시작했지만, 현재는 'KServe'로 이름이 바뀌었습니다. Kserve는 구글, IBM, 블룸버그 등 여러 기업이 참여하는 Kubeflow 프로젝트의 일부로 개발되었고, 현재 GitHub에서 4,000개 이상의 스타와 1,100개 이상의 포크를 보유한 활발한 프로젝트입니다.
 
