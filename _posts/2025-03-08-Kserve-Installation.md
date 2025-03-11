@@ -24,6 +24,9 @@ toc: true
 
 ## KServe 설치
 
+- KServe를 설치하기 위해서는 Knative, Istio, Cert Manager 등 여러 third-party 구성 요소를 먼저 구축해야 합니다.
+- **용기를 가지고** 아래 가이드를 차근차근 참고하여 설치해봅시다!
+
 ### 시작하기 전에 필요한 환경
 
 [Kserve 공식 문서](https://kserve.github.io/website/latest/admin/serverless/serverless/)를 참고하여 Serverless 형태로 구축합니다.이에 따라 다음과 같은 환경이 필요합니다.
@@ -97,8 +100,8 @@ nvidia-operator-validator-kkjcn                               1/1     Running   
 - serving-core.yaml
   
 ```bash
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/kserve 설치/knative$  kubectl apply -f serving-crds.yaml
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/kserve 설치/knative$  kubectl apply -f serving-core.yaml
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/kserve 설치/knative$  k apply -f serving-crds.yaml
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/kserve 설치/knative$  k apply -f serving-core.yaml
 ```
 
 - knative component들을 확인합니다.
@@ -123,6 +126,7 @@ webhook-57ccdb4884-25sqp      1/1     Running   3 (9m1s ago)    21m
 # https://istio.io/latest/docs/setup/additional-setup/download-istio-release/
 (base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:$ curl -L https://istio.io/downloadIstio | sh -
 (base) jmlim@jmlim-Lenovo-Legion-5-15ARH05/istio-1.25.0:$ cd istio-1.25.0
+
 # 환경변수 설정
 (base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:$ export PATH=$PWD/bin:$PATH
 ```
@@ -132,6 +136,7 @@ webhook-57ccdb4884-25sqp      1/1     Running   3 (9m1s ago)    21m
 ```bash
 # istio 설치
 (base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:$ istioctl install
+
 # istio 설치 확인
 (base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:$ k get pods -n istio-system
 NAME                                    READY   STATUS    RESTARTS   AGE
@@ -141,6 +146,147 @@ istiod-5dc686f4cf-h2rfj                 1/1     Running   0          87s
 - Knative Istio controller를 설치합니다.
 
 ```bash
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ kubectl apply -f https://github.com/knative/net-istio/releases/download/knative-v1.17.0/net-istio.yaml
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply -f https://github.com/knative/net-istio/releases/download/knative-v1.17.0/net-istio.yaml
 ```
 
+- Istio 외부 접속을 위해 LoadBalancer 타입의 Service를 **Nodeport**로 변경합니다. (혹은 MetaLB를 통해 LoadBalancer로 활용해도 됩니다.)
+- 본 글에서 활용하고 있는 Minikube 클러스터에서 Nodeport 사용 시, Minikbe의 IP를 통해 요청할 수 있습니다. 
+
+```bash
+# Istio Service 타입 변경
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k patch svc istio-ingressgateway -n istio-system -p '{"spec": {"type": "NodePort"}}'
+service/istio-ingressgateway patched
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get svc -n istio-system
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                                      AGE
+istio-ingressgateway    NodePort    10.101.70.126   <none>        15021:31483/TCP,80:30439/TCP,443:30839/TCP   2d22h
+istiod                  ClusterIP   10.102.2.212    <none>        15010/TCP,15012/TCP,443/TCP,15014/TCP        2d22h
+knative-local-gateway   ClusterIP   10.98.109.221   <none>        80/TCP,443/TCP                               2d22h
+
+# Minikube 클러스터 IP 확인
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ mk -p mlops ip
+192.168.49.2
+```
+
+**(4) (선택) Knative HPA 설치**
+
+- Kubernetes의 기본 HPA 대신 Knative의 HPA를 사용하여 자동 스케일링하기 위해 설치합니다.
+
+```bash
+# knative-serving hpa 설치
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply -f https://github.com/knative/serving/releases/download/knative-v1.17.0/serving-hpa.yaml
+deployment.apps/autoscaler-hpa created
+service/autoscaler-hpa created
+
+# 확인
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get pods -n knative-serving
+NAME                                    READY   STATUS    RESTARTS      AGE
+activator-7c48c6944d-t55t2              1/1     Running   2 (62m ago)   2d23h
+autoscaler-775c659bc6-26vbl             1/1     Running   3 (62m ago)   2d23h
+autoscaler-hpa-998cd99bb-bjxkn          1/1     Running   0             11s
+controller-7cf4fbd94-4vcnz              1/1     Running   9 (34m ago)   2d23h
+net-istio-controller-5d7c696f76-sdg2p   1/1     Running   3 (62m ago)   2d22h
+net-istio-webhook-58bb884dc-jlbvz       1/1     Running   3 (62m ago)   2d22h
+webhook-57ccdb4884-25sqp                1/1     Running   6 (62m ago)   2d23h
+```
+
+### Cert-Manager 설치
+
+[Cert-Manager Installation](https://cert-manager.io/docs/installation/)을 참고하여 진행합니다.
+
+- Kubernetes 환경에서 TLS 인증서를 자동으로 관리하기 위해 Cert Manager 설치합니다.
+
+```bash
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.0/cert-manager.yaml
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get pods -n cert-manager
+NAME                                       READY   STATUS    RESTARTS   AGE
+cert-manager-5b85cc56c4-grp7d              1/1     Running   0          43s
+cert-manager-cainjector-547db48bc7-2kmvk   1/1     Running   0          43s
+cert-manager-webhook-58f7b445c4-jvd27      1/1     Running   0          43s
+```
+### Kserve v0.14.1 CRD / Controller / ClusterServingRuntime 설치
+
+- 드디어 최종적으로 Kserve를 배포합니다!
+- [Install KServe - Install using YAML](https://kserve.github.io/website/latest/admin/serverless/serverless/#1-install-knative-serving)을 참고합니다.
+
+```bash
+# CRD, Controller 설치
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply --server-side -f https://github.com/kserve/kserve/releases/download/v0.14.1/kserve.yaml
+
+# ClusterServingRuntime 설치
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply --server-side -f https://github.com/kserve/kserve/releases/download/v0.14.1/kserve-cluster-resources.yaml
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get all -n kserve
+NAME                                                        READY   STATUS    RESTARTS   AGE
+pod/kserve-controller-manager-5c6ff8c6d4-m778w              2/2     Running   0          3m26s
+pod/kserve-localmodel-controller-manager-7df647ffbf-dk82j   1/1     Running   0          3m26s
+
+NAME                                                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/kserve-controller-manager-metrics-service   ClusterIP   10.100.25.208   <none>        8443/TCP   3m26s
+service/kserve-controller-manager-service           ClusterIP   10.103.244.57   <none>        8443/TCP   3m26s
+service/kserve-webhook-server-service               ClusterIP   10.109.48.66    <none>        443/TCP    3m26s
+
+NAME                                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR              AGE
+daemonset.apps/kserve-localmodelnode-agent   0         0         0       0            0           kserve/localmodel=worker   3m26s
+
+NAME                                                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/kserve-controller-manager              1/1     1            1           3m26s
+deployment.apps/kserve-localmodel-controller-manager   1/1     1            1           3m26s
+
+NAME                                                              DESIRED   CURRENT   READY   AGE
+replicaset.apps/kserve-controller-manager-5c6ff8c6d4              1         1         1       3m26s
+replicaset.apps/kserve-localmodel-controller-manager-7df647ffbf   1         1         1       3m26s
+```
+- Kserve 설치를 확인합니다.
+
+```bash
+# 컴포넌트 확인
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get all -n kserve
+NAME                                                        READY   STATUS    RESTARTS   AGE
+pod/kserve-controller-manager-5c6ff8c6d4-m778w              2/2     Running   0          3m26s
+pod/kserve-localmodel-controller-manager-7df647ffbf-dk82j   1/1     Running   0          3m26s
+
+NAME                                                TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+service/kserve-controller-manager-metrics-service   ClusterIP   10.100.25.208   <none>        8443/TCP   3m26s
+service/kserve-controller-manager-service           ClusterIP   10.103.244.57   <none>        8443/TCP   3m26s
+service/kserve-webhook-server-service               ClusterIP   10.109.48.66    <none>        443/TCP    3m26s
+
+NAME                                         DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR              AGE
+daemonset.apps/kserve-localmodelnode-agent   0         0         0       0            0           kserve/localmodel=worker   3m26s
+
+NAME                                                   READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/kserve-controller-manager              1/1     1            1           3m26s
+deployment.apps/kserve-localmodel-controller-manager   1/1     1            1           3m26s
+
+NAME                                                              DESIRED   CURRENT   READY   AGE
+replicaset.apps/kserve-controller-manager-5c6ff8c6d4              1         1         1       3m26s
+replicaset.apps/kserve-localmodel-controller-manager-7df647ffbf   1         1         1       3m26s
+
+# CRD(Custom Resource Definitions) 확인
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get crd | grep serving.kserve.io
+clusterservingruntimes.serving.kserve.io              2025-01-22T10:59:42Z
+clusterstoragecontainers.serving.kserve.io            2025-01-22T10:59:42Z
+inferencegraphs.serving.kserve.io                     2025-01-22T10:59:42Z
+inferenceservices.serving.kserve.io                   2025-01-22T10:59:42Z
+localmodelcaches.serving.kserve.io                    2025-01-22T11:13:06Z
+localmodelnodegroups.serving.kserve.io                2025-01-22T11:13:06Z
+localmodelnodes.serving.kserve.io                     2025-01-22T11:13:06Z
+servingruntimes.serving.kserve.io                     2025-01-22T10:59:44Z
+trainedmodels.serving.kserve.io                       2025-01-22T10:59:44Z
+
+# ClusterServingRuntimes 확인
+(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get clusterservingruntimes
+NAME                        DISABLED   MODELTYPE     CONTAINERS         AGE
+kserve-huggingfaceserver               huggingface   kserve-container   4m
+kserve-lgbserver                       lightgbm      kserve-container   4m
+kserve-mlserver                        sklearn       kserve-container   4m
+kserve-paddleserver                    paddle        kserve-container   4m
+kserve-pmmlserver                      pmml          kserve-container   4m
+kserve-sklearnserver                   sklearn       kserve-container   4m
+kserve-tensorflow-serving              tensorflow    kserve-container   4m
+kserve-torchserve                      pytorch       kserve-container   4m
+kserve-tritonserver                    tensorrt      kserve-container   4m
+kserve-xgbserver                       xgboost       kserve-container   4m
+```
+
+## 정리
+
+이로써 KServe 설치 과정을 성공적으로 완료했습니다. KServe의 핵심 컴포넌트들을 통해 이제 Kubernetes 환경에서 ML 모델을 효율적으로 배포하고 관리할 수 있는 기반이 마련되었습니다. 다음 글에서는 실제 ML 모델을 KServe에 배포하고 추론 요청을 처리하는 방법에 대해 자세히 알아보겠습니다.
