@@ -1,5 +1,5 @@
 ---
-title: "Kserve 소개"
+title: "[Kserve] 1.소개"
 # author:
 #   name: Joung min Lim
 #   link: https://github.com/min731

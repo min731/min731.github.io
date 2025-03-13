@@ -1,5 +1,5 @@
 ---
-title: "Kserve 설치 및 구축"
+title: "[Kserve] 2. 설치 및 구축"
 # author:
 #   name: Joung min Lim
 #   link: https://github.com/min731
