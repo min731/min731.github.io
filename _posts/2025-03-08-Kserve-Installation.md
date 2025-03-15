@@ -42,11 +42,11 @@ toc: true
 필자는 Minikube를 활용하여 **v1.31.0** K8S, **v1.31.1** 버전의 Kubectl을 설치하였습니다.
 
 ```bash
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get nodes -o wide
+(base) jmlim@Legion-5:~$ k get nodes -o wide
 NAME        STATUS   ROLES           AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 mlops       Ready    control-plane   50d   v1.31.0   192.168.49.2   <none>        Ubuntu 22.04.4 LTS   6.8.0-52-generic   docker://27.2.0
 mlops-m02   Ready    worker          50d   v1.31.0   192.168.49.3   <none>        Ubuntu 22.04.4 LTS   6.8.0-52-generic   docker://27.2.0
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ kubectl version
+(base) jmlim@Legion-5:~$ kubectl version
 Client Version: v1.31.1
 Kustomize Version: v5.4.2
 Server Version: v1.31.0
@@ -57,7 +57,7 @@ Server Version: v1.31.0
 GPU를 활용하고자 할 경우, gpu-operator가 이미 설치되어 있어야 합니다.
 
 ```bash
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get pods -n gpu-operator
+(base) jmlim@Legion-5:~$ k get pods -n gpu-operator
 NAME                                                          READY   STATUS      RESTARTS       AGE
 gpu-feature-discovery-9bwdm                                   1/1     Running     22 (47h ago)   45d
 gpu-feature-discovery-ddjxp                                   1/1     Running     22 (47h ago)   45d
@@ -100,14 +100,14 @@ nvidia-operator-validator-kkjcn                               1/1     Running   
 - serving-core.yaml
   
 ```bash
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/kserve 설치/knative$  k apply -f serving-crds.yaml
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/kserve 설치/knative$  k apply -f serving-core.yaml
+(base) jmlim@Legion-5:~/kserve 설치/knative$  k apply -f serving-crds.yaml
+(base) jmlim@Legion-5:~/kserve 설치/knative$  k apply -f serving-core.yaml
 ```
 
 - knative component들을 확인합니다.
 
 ```bash
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/kserve 설치/knative$ k get pods -n knative-serving
+(base) jmlim@Legion-5:~/kserve 설치/knative$ k get pods -n knative-serving
 NAME                          READY   STATUS    RESTARTS        AGE
 activator-7c48c6944d-t55t2    1/1     Running   0               21m
 autoscaler-775c659bc6-26vbl   1/1     Running   1 (9m45s ago)   21m
@@ -124,21 +124,21 @@ webhook-57ccdb4884-25sqp      1/1     Running   3 (9m1s ago)    21m
 ```bash
 # istioctl 바이너리 파일 다운로드
 # https://istio.io/latest/docs/setup/additional-setup/download-istio-release/
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:$ curl -L https://istio.io/downloadIstio | sh -
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05/istio-1.25.0:$ cd istio-1.25.0
+(base) jmlim@Legion-5:$ curl -L https://istio.io/downloadIstio | sh -
+(base) jmlim@Legion-5/istio-1.25.0:$ cd istio-1.25.0
 
 # 환경변수 설정
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:$ export PATH=$PWD/bin:$PATH
+(base) jmlim@Legion-5:$ export PATH=$PWD/bin:$PATH
 ```
 
 - Istio를 설치하고 확인합니다.
 
 ```bash
 # istio 설치
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:$ istioctl install
+(base) jmlim@Legion-5:$ istioctl install
 
 # istio 설치 확인
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:$ k get pods -n istio-system
+(base) jmlim@Legion-5:$ k get pods -n istio-system
 NAME                                    READY   STATUS    RESTARTS   AGE
 istio-ingressgateway-7f56c6746b-j5xbl   1/1     Running   0          73s
 istiod-5dc686f4cf-h2rfj                 1/1     Running   0          87s
@@ -146,7 +146,7 @@ istiod-5dc686f4cf-h2rfj                 1/1     Running   0          87s
 - Knative Istio controller를 설치합니다.
 
 ```bash
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply -f https://github.com/knative/net-istio/releases/download/knative-v1.17.0/net-istio.yaml
+(base) jmlim@Legion-5:~$ k apply -f https://github.com/knative/net-istio/releases/download/knative-v1.17.0/net-istio.yaml
 ```
 
 - Istio 외부 접속을 위해 LoadBalancer 타입의 Service를 **Nodeport**로 변경합니다. (혹은 MetaLB를 통해 LoadBalancer로 활용해도 됩니다.)
@@ -154,16 +154,16 @@ istiod-5dc686f4cf-h2rfj                 1/1     Running   0          87s
 
 ```bash
 # Istio Service 타입 변경
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k patch svc istio-ingressgateway -n istio-system -p '{"spec": {"type": "NodePort"}}'
+(base) jmlim@Legion-5:~$ k patch svc istio-ingressgateway -n istio-system -p '{"spec": {"type": "NodePort"}}'
 service/istio-ingressgateway patched
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get svc -n istio-system
+(base) jmlim@Legion-5:~$ k get svc -n istio-system
 NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)                                      AGE
 istio-ingressgateway    NodePort    10.101.70.126   <none>        15021:31483/TCP,80:30439/TCP,443:30839/TCP   2d22h
 istiod                  ClusterIP   10.102.2.212    <none>        15010/TCP,15012/TCP,443/TCP,15014/TCP        2d22h
 knative-local-gateway   ClusterIP   10.98.109.221   <none>        80/TCP,443/TCP                               2d22h
 
 # Minikube 클러스터 IP 확인
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ mk -p mlops ip
+(base) jmlim@Legion-5:~$ mk -p mlops ip
 192.168.49.2
 ```
 
@@ -173,12 +173,12 @@ knative-local-gateway   ClusterIP   10.98.109.221   <none>        80/TCP,443/TCP
 
 ```bash
 # knative-serving hpa 설치
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply -f https://github.com/knative/serving/releases/download/knative-v1.17.0/serving-hpa.yaml
+(base) jmlim@Legion-5:~$ k apply -f https://github.com/knative/serving/releases/download/knative-v1.17.0/serving-hpa.yaml
 deployment.apps/autoscaler-hpa created
 service/autoscaler-hpa created
 
 # 확인
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get pods -n knative-serving
+(base) jmlim@Legion-5:~$ k get pods -n knative-serving
 NAME                                    READY   STATUS    RESTARTS      AGE
 activator-7c48c6944d-t55t2              1/1     Running   2 (62m ago)   2d23h
 autoscaler-775c659bc6-26vbl             1/1     Running   3 (62m ago)   2d23h
@@ -196,8 +196,8 @@ webhook-57ccdb4884-25sqp                1/1     Running   6 (62m ago)   2d23h
 - Kubernetes 환경에서 TLS 인증서를 자동으로 관리하기 위해 Cert Manager 설치합니다.
 
 ```bash
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.0/cert-manager.yaml
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get pods -n cert-manager
+(base) jmlim@Legion-5:~$ k apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.0/cert-manager.yaml
+(base) jmlim@Legion-5:~$ k get pods -n cert-manager
 NAME                                       READY   STATUS    RESTARTS   AGE
 cert-manager-5b85cc56c4-grp7d              1/1     Running   0          43s
 cert-manager-cainjector-547db48bc7-2kmvk   1/1     Running   0          43s
@@ -210,11 +210,11 @@ cert-manager-webhook-58f7b445c4-jvd27      1/1     Running   0          43s
 
 ```bash
 # CRD, Controller 설치
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply --server-side -f https://github.com/kserve/kserve/releases/download/v0.14.1/kserve.yaml
+(base) jmlim@Legion-5:~$ k apply --server-side -f https://github.com/kserve/kserve/releases/download/v0.14.1/kserve.yaml
 
 # ClusterServingRuntime 설치
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k apply --server-side -f https://github.com/kserve/kserve/releases/download/v0.14.1/kserve-cluster-resources.yaml
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get all -n kserve
+(base) jmlim@Legion-5:~$ k apply --server-side -f https://github.com/kserve/kserve/releases/download/v0.14.1/kserve-cluster-resources.yaml
+(base) jmlim@Legion-5:~$ k get all -n kserve
 NAME                                                        READY   STATUS    RESTARTS   AGE
 pod/kserve-controller-manager-5c6ff8c6d4-m778w              2/2     Running   0          3m26s
 pod/kserve-localmodel-controller-manager-7df647ffbf-dk82j   1/1     Running   0          3m26s
@@ -239,7 +239,7 @@ replicaset.apps/kserve-localmodel-controller-manager-7df647ffbf   1         1   
 
 ```bash
 # 컴포넌트 확인
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get all -n kserve
+(base) jmlim@Legion-5:~$ k get all -n kserve
 NAME                                                        READY   STATUS    RESTARTS   AGE
 pod/kserve-controller-manager-5c6ff8c6d4-m778w              2/2     Running   0          3m26s
 pod/kserve-localmodel-controller-manager-7df647ffbf-dk82j   1/1     Running   0          3m26s
@@ -261,7 +261,7 @@ replicaset.apps/kserve-controller-manager-5c6ff8c6d4              1         1   
 replicaset.apps/kserve-localmodel-controller-manager-7df647ffbf   1         1         1       3m26s
 
 # CRD(Custom Resource Definitions) 확인
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get crd | grep serving.kserve.io
+(base) jmlim@Legion-5:~$ k get crd | grep serving.kserve.io
 clusterservingruntimes.serving.kserve.io              2025-01-22T10:59:42Z
 clusterstoragecontainers.serving.kserve.io            2025-01-22T10:59:42Z
 inferencegraphs.serving.kserve.io                     2025-01-22T10:59:42Z
@@ -273,7 +273,7 @@ servingruntimes.serving.kserve.io                     2025-01-22T10:59:44Z
 trainedmodels.serving.kserve.io                       2025-01-22T10:59:44Z
 
 # ClusterServingRuntimes 확인
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~$ k get clusterservingruntimes
+(base) jmlim@Legion-5:~$ k get clusterservingruntimes
 NAME                        DISABLED   MODELTYPE     CONTAINERS         AGE
 kserve-huggingfaceserver               huggingface   kserve-container   4m
 kserve-lgbserver                       lightgbm      kserve-container   4m

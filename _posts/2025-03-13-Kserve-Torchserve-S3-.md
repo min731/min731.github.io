@@ -11,7 +11,7 @@ categories: [MLOps | 인프라 개발, Model Serving]
 # categories: [Life | 일상 이야기, 와플먹으면서 공부하기]
 # categories: [STEM | 수학/통계, Statistics]
 tags: [DeepLearning, MLOps, Kubeflow, Kserve, TorchServe]
-description: "Kserve를 활용하여 쿠버네티스 상에서 TorchServe를 배포해봅시다."
+description: "Kserve를 활용하여 쿠버네티스 상에 TorchServe 런타임을 배포해봅시다."
 image: assets/img/posts/resize/output/kserve.png # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
 toc: true
@@ -51,6 +51,7 @@ KServe는 TorchServe를 기본 런타임으로 통합하여, PyTorch 모델을 �
 
 - 데이터셋
   - Torchvision 내장 라이브러리 활용 Download
+  - [https://www.kaggle.com/datasets/hojjatk/mnist-dataset](https://www.kaggle.com/datasets/hojjatk/mnist-dataset)
   - [http://yann.lecun.com/exdb/mnist/](http://yann.lecun.com/exdb/mnist/)
 - 학습 코드
   - [https://github.com/pytorch/examples/blob/main/mnist/main.py](https://github.com/pytorch/examples/blob/main/mnist/main.py)
@@ -58,7 +59,7 @@ KServe는 TorchServe를 기본 런타임으로 통합하여, PyTorch 모델을 �
 첨부한 데이터셋과 학습 코드를 다운받고 아래와 같은 디렉토리를 구성합니다.
 
 ```bash
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ tree
+(base) jmlim@Legion-5:~/model-example/mnist/pytorch$ tree
 .
 ├── README.md
 ├── data
@@ -80,17 +81,17 @@ Pytorch 가상환경을 구축하고 의존성을 설치합니다.
 
 ```bash
 # 가상환경 설치
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ conda create -n pytorch python==3.10
+(base) jmlim@Legion-5:~/model-example/mnist/pytorch$ conda create -n pytorch python==3.10
 
 # 가상환경 활성화
-(base) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ conda activate pytorch
+(base) jmlim@Legion-5:~/model-example/mnist/pytorch$ conda activate pytorch
 
 # 의존성 설치
-(pytorch) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ pip install -r requirements.txt 
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ pip install -r requirements.txt 
 
 # 모델 학습 및 저장
-(pytorch) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ python main.py --save-model
-(pytorch) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ ls | grep .pt
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ python main.py --save-model
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ ls | grep .pt
 -rw-rw-r-- 1 jmlim jmlim 4.6M  3월 13 20:04 mnist_cnn.pt
 ```
 
@@ -100,9 +101,9 @@ Pytorch 가상환경을 구축하고 의존성을 설치합니다.
 
 ```bash
 # 모델 패키징
-(pytorch) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ pip install torch-model-archiver
-(pytorch) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ torch-model-archiver --model-name mnist --version 1.0 --serialized-file mnist_cnn.pt --handler image_classifier
-(pytorch) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ ls | grep mar
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ pip install torch-model-archiver
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ torch-model-archiver --model-name mnist --version 1.0 --serialized-file mnist_cnn.pt --handler image_classifier
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ ls | grep mar
 -rw-rw-r-- 1 jmlim jmlim 4.3M  3월 13 20:18 mnist.mar
 ```
 
@@ -113,7 +114,7 @@ TorchServe에서 사용하는 모델 저장소 디렉토리로 구성하고 conf
 
 ```bash
 # 디렉토리 구성
-(pytorch) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ find config model-store -type d | sort | uniq | xargs tree
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ find config model-store -type d | sort | uniq | xargs tree
 config
 └── config.properties
 model-store
@@ -122,22 +123,130 @@ model-store
 0 directories, 1 file
 
 # config.properties 파일 설정
-(pytorch) jmlim@jmlim-Lenovo-Legion-5-15ARH05:~/model-example/mnist/pytorch$ cat config/config.properties
-inference_address=http://0.0.0.0:8085
-management_address=http://0.0.0.0:8085
-metrics_address=http://0.0.0.0:8082
-grpc_inference_port=7070
-grpc_management_port=7071
-enable_metrics_api=true
-metrics_format=prometheus
-number_of_netty_threads=4
-job_queue_size=10
-enable_envvars_config=true
-install_py_dep_per_model=true
-model_store=/mnt/models/model-store
-model_snapshot={"name":"startup.cfg","modelCount":1,"models":{"mnist":{"1.0":{"defaultVersion":true,"marName":"mnist.mar","minWorkers":1,"maxWorkers":5,"batchSize":1,"maxBatchDelay":10,"responseTimeout":120}}}}
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ cat config/config.properties
+inference_address=http://0.0.0.0:8085 # 추론 요청을 처리하는 HTTP 서버 주소 및 포트
+management_address=http://0.0.0.0:8085 # 모델 관리 API(모델 등록/삭제 등)를 처리하는 서버 주소 및 포트
+metrics_address=http://0.0.0.0:8082 # 메트릭 수집 및 노출을 위한 서버 주소 및 포트
+grpc_inference_port=7070 # gRPC 추론 API를 제공하는 포트
+grpc_management_port=7071 # gRPC 관리 API를 제공하는 포트
+enable_metrics_api=true # 메트릭 API 활성화 여부
+metrics_format=prometheus # 메트릭 출력 형식 (Prometheus 형식으로 노출)
+number_of_netty_threads=4 # 요청 처리를 위한 Netty 스레드 수
+job_queue_size=10 # 대기열에 넣을 수 있는 작업 수
+enable_envvars_config=true # 환경 변수를 통한 설정 활성화 (KServe와 통합 시 중요)
+install_py_dep_per_model=true # 모델별 Python 종속성 설치 허용
+model_store=/mnt/models/model-store # 모델 저장소 경로 지정
+model_snapshot={"name":"startup.cfg","modelCount":1,"models":{"mnist":{"1.0":{"defaultVersion":true,"marName":"mnist.mar","minWorkers":1,"maxWorkers":5,"batchSize":1,"maxBatchDelay":10,"responseTimeout":120}}}} # mnist 모델의 버전, 작업자 수, 배치 크기 등 정의
 ```
 
 ### S3 업로드 및 ServiceAccount 설정
 
-(작성중)
+**(1) S3 버킷에 모델 업로드**
+
+```bash
+# awscli 설치
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ pip install awscli
+
+# awscli 인증 정보 설정 (Access Key, Secret Access Key 등)
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ aws configure
+
+# TorchServe 디렉토리 업로드
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ aws s3 cp --recursive config s3://jmbucket731/kserve/torchserve/mnist/config/
+upload: config/config.properties to s3://jmbucket731/kserve/torchserve/mnist/config/config.properties
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ aws s3 cpaws s3 cp --recursive model-store s3://jmbucket731/kserve/torchserve/mnist/model-store/
+upload: model-store/mnist.mar to s3://jmbucket731/kserve/torchserve/mnist/model-store/mnist.mar
+```
+
+**(2) S3 인증 정보 Secret 생성**
+
+S3에 저장된 모델에 접근하기 위해 인증 정보가 포함된 Secret을 생성합니다.
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: s3creds
+  namespace: torchserve
+  annotations:
+     serving.kserve.io/s3-endpoint: s3.amazonaws.com  # S3 엔드포인트
+     serving.kserve.io/s3-usehttps: "1"  # HTTPS 사용 여부 (1: 사용, 0: 미사용)
+     serving.kserve.io/s3-region: "ap-northeast-2"  # 리전 설정
+     serving.kserve.io/s3-useanoncredential: "false"  # 익명 인증 미사용
+type: Opaque
+stringData:
+  AWS_ACCESS_KEY_ID: XXXXXXXXXXXX  # 실제 액세스 키로 교체
+  AWS_SECRET_ACCESS_KEY: XXXXXXXXXXXXXXXX  # 실제 시크릿 키로 교체
+```
+
+```bash
+# torchserve 네임스페이스 생성
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ k create ns torchserve
+namespace/torchserve created
+
+# secret 배포 및 확인
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ k apply -f s3-secret.yaml.yaml
+secret/s3creds created
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ k get secret -n torchserve
+NAME      TYPE     DATA   AGE
+s3creds   Opaque   2      19s
+```
+
+**(3) ServiceAccount 생성 및 Secret 연결**
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: torchserve-sa
+  namespace: torchserve
+secrets:
+- name: s3creds
+```
+
+```bash
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ k apply -f torchserve-sa.yaml
+serviceaccount/torchserve-sa created
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ k get sa -n torchserve
+NAME            SECRETS   AGE
+default         0         3m3s
+torchserve-sa   1         4s
+```
+
+### InferenceService 배포
+
+S3에 저장된 TorchServe 모델을 사용하여 InferenceService를 배포합니다.
+
+```yaml
+apiVersion: "serving.kserve.io/v1beta1"
+kind: "InferenceService"
+metadata:
+  name: "mnist-torchserve"
+  namespacea: torchserve
+spec:
+  predictor:
+    serviceAccountName: torchserve-sa  # 위에서 생성한 ServiceAccount
+    model:
+      modelFormat:
+        name: pytorch  # PyTorch 모델 지정
+      storageUri: "s3://jmbucket731/kserve/torchserve/mnist"  # S3 경로
+```
+
+```bash
+# Inferenceservice 배포 및 확인
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ k apply -f mnist-torchserve.yaml
+inferenceservice.serving.kserve.io/mnist-torchserve created
+(pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ k get pods -n torchserve
+NAME                                                          READY   STATUS    RESTARTS   AGE
+mnist-torchserve-predictor-00001-deployment-df8cd9c66-z7rdj   2/2     Running   0          3m20s
+```
+
+### 모델 추론 테스트
+
+**(1) 테스트 이미지 준비**
+
+- 테스트 데이터
+  - [https://www.kaggle.com/datasets/jidhumohan/mnist-png](https://www.kaggle.com/datasets/jidhumohan/mnist-png)
+
+```python
+
+```
