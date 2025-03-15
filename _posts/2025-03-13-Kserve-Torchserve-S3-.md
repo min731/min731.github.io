@@ -239,14 +239,3 @@ inferenceservice.serving.kserve.io/mnist-torchserve created
 NAME                                                          READY   STATUS    RESTARTS   AGE
 mnist-torchserve-predictor-00001-deployment-df8cd9c66-z7rdj   2/2     Running   0          3m20s
 ```
-
-### 모델 추론 테스트
-
-**(1) 테스트 이미지 준비**
-
-- 테스트 데이터
-  - [https://www.kaggle.com/datasets/jidhumohan/mnist-png](https://www.kaggle.com/datasets/jidhumohan/mnist-png)
-
-```python
-
-```
