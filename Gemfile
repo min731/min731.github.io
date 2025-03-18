@@ -49,3 +49,6 @@ gem "html-proofer", "~> 5.0", group: :test
 
 # Ruby 3.0 이상에 필요
 gem "webrick", "~> 1.8"
+
+# Gemfile에 추가
+gem 'sass-embedded', '~> 1.64.1'  # 이전 안정 버전  
