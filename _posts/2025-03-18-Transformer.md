@@ -1023,31 +1023,31 @@ transformer = Transformer(
 )
 
 # 가상의 입력 데이터 (배치 크기 = 16, 시퀀스 길이 = 20)
-src = torch.randint(1, input_vocab_size, (16, 20))
-tgt = torch.randint(1, target_vocab_size, (16, 20))
+src = torch.randint(1, input_vocab_size, (16, 20))  # [batch_size=16, src_seq_len=20]
+tgt = torch.randint(1, target_vocab_size, (16, 20))  # [batch_size=16, tgt_seq_len=20]
 
 # 마스크 생성
-src_mask = (src != 0).unsqueeze(1).unsqueeze(2)  # 패딩 마스크
-tgt_mask = transformer.generate_square_subsequent_mask(tgt.size(1))  # 룩어헤드 마스크
-mem_mask = src_mask  # 메모리 마스크 (인코더 출력에 대한 패딩 마스크)
+src_mask = (src != 0).unsqueeze(1).unsqueeze(2)  # [batch_size=16, 1, 1, src_seq_len=20] - 패딩 마스크
+tgt_mask = transformer.generate_square_subsequent_mask(tgt.size(1))  # [1, tgt_seq_len=20, tgt_seq_len=20] - 룩어헤드 마스크
+mem_mask = src_mask  # [batch_size=16, 1, 1, src_seq_len=20] - 메모리 마스크 (인코더 출력에 대한 패딩 마스크)
 
 # 모델 순전파
-output = transformer(src, tgt, src_mask, tgt_mask, mem_mask)
+output = transformer(src, tgt, src_mask, tgt_mask, mem_mask)  # [batch_size=16, tgt_seq_len=20, target_vocab_size=10000]
 
 # 출력 형태 확인
-print(f"Input shape: {src.shape}")
-print(f"Output shape: {output.shape}")
+print(f"Input shape: {src.shape}")  # [16, 20]
+print(f"Output shape: {output.shape}")  # [16, 20, 10000]
 
 # 시퀀스 생성 예시
-generated = transformer.generate(src, src_mask)
-print(f"Generated sequence shape: {generated.shape}")
+generated = transformer.generate(src, src_mask)  # [batch_size=16, max_len(또는 종료 토큰이 나올 때까지의 길이)]
+print(f"Generated sequence shape: {generated.shape}")  # 예: [16, 생성된_시퀀스_길이]
 ```
 
 ## 5. Transformer의 학습 및 추론
 
 **5.1 손실 함수**
 
-Transformer 모델은 일반적으로 교차 엔트로피 손실(Cross-Entropy Loss)을 사용하여 학습됩니다. 이는 모델이 각 위치에서 다음 토큰을 올바르게 예측하도록 훈련시킵니다.
+Transformer 모델은 일반적으로 Cross-Entropy Loss를 사용하여 학습됩니다. 이는 모델이 각 위치에서 다음 토큰을 올바르게 예측하도록 훈련시킵니다.
 
 ```python
 # 손실 함수 정의
@@ -1056,12 +1056,13 @@ criterion = nn.CrossEntropyLoss(ignore_index=0)  # 패딩 토큰(0)은 무시
 # 손실 계산 예시
 # output: [batch_size, tgt_seq_len, target_vocab_size]
 # target: [batch_size, tgt_seq_len]
-loss = criterion(output.view(-1, target_vocab_size), tgt.view(-1))
+loss = criterion(output.view(-1, target_vocab_size), tgt.view(-1))  
+# view 후: output: [batch_size*tgt_seq_len, target_vocab_size], tgt: [batch_size*tgt_seq_len]
 ```
 
 **5.2 학습 과정**
 
-Transformer의 학습 과정은 다음과 같습니다.
+Transformer의 학습 과정입니다.
 
 ```python
 # 옵티마이저 설정
@@ -1074,24 +1075,25 @@ def train_epoch(model, dataloader, optimizer, criterion, device):
     
     for batch in dataloader:
         # 배치 데이터 추출
-        src, tgt = batch
+        src, tgt = batch  # src: [batch_size, src_seq_len], tgt: [batch_size, tgt_seq_len]
         src, tgt = src.to(device), tgt.to(device)
         
         # 타겟 입력과 타겟 출력 분리
         # 디코더 입력: 시작 토큰 ~ 마지막 토큰 이전
         # 디코더 출력(정답): 시작 토큰 이후 ~ 마지막 토큰
-        tgt_inp = tgt[:, :-1]
-        tgt_out = tgt[:, 1:]
+        tgt_inp = tgt[:, :-1]  # [batch_size, tgt_seq_len-1]
+        tgt_out = tgt[:, 1:]   # [batch_size, tgt_seq_len-1]
         
         # 마스크 생성
-        src_mask = (src != 0).unsqueeze(1).unsqueeze(2)
-        tgt_mask = model.generate_square_subsequent_mask(tgt_inp.size(1)).to(device)
+        src_mask = (src != 0).unsqueeze(1).unsqueeze(2)  # [batch_size, 1, 1, src_seq_len]
+        tgt_mask = model.generate_square_subsequent_mask(tgt_inp.size(1)).to(device)  # [1, tgt_seq_len-1, tgt_seq_len-1]
         
         # 모델 순전파
-        output = model(src, tgt_inp, src_mask, tgt_mask, src_mask)
+        output = model(src, tgt_inp, src_mask, tgt_mask, src_mask)  # [batch_size, tgt_seq_len-1, target_vocab_size]
         
         # 손실 계산
         loss = criterion(output.reshape(-1, output.size(-1)), tgt_out.reshape(-1))
+        # reshape 후: output: [batch_size*(tgt_seq_len-1), target_vocab_size], tgt_out: [batch_size*(tgt_seq_len-1)]
         
         # 역전파 및 최적화
         optimizer.zero_grad()
@@ -1105,30 +1107,30 @@ def train_epoch(model, dataloader, optimizer, criterion, device):
 
 **5.3 추론 (번역 예시)**
 
-학습된 Transformer 모델을 사용한 추론 과정은 다음과 같습니다. 이 예시에서는 영어에서 한국어로의 번역 태스크를 가정합니다.
+학습된 Transformer 모델을 사용한 추론 과정입니다. 아래 예시는 영어에서 한국어로의 번역 태스크를 가정합니다.
 
 ```python
 def translate(model, src_sentence, src_tokenizer, tgt_tokenizer, device, max_len=100):
     model.eval()
     
     # 소스 문장 토큰화
-    tokens = src_tokenizer.encode(src_sentence)
-    src = torch.tensor([tokens]).to(device)
+    tokens = src_tokenizer.encode(src_sentence)  # [토큰 수] 
+    src = torch.tensor([tokens]).to(device)  # [1, src_seq_len]
     
     # 소스 마스크 생성
-    src_mask = (src != 0).unsqueeze(1).unsqueeze(2).to(device)
+    src_mask = (src != 0).unsqueeze(1).unsqueeze(2).to(device)  # [1, 1, 1, src_seq_len]
     
     # 시퀀스 생성
-    output = model.generate(src, src_mask, max_len=max_len)
+    output = model.generate(src, src_mask, max_len=max_len)  # [1, 생성된_시퀀스_길이]
     
     # 결과 디코딩
-    translated = tgt_tokenizer.decode(output[0].tolist())
+    translated = tgt_tokenizer.decode(output[0].tolist())  # 문자열
     
     return translated
 ```
 
 ## 마치며
 
-오늘은 LLM들의 기초가 되는 Transformer의 특징을 알아보고 이를 Pytorch로 구현한 코드에 대해 자세히 리뷰해보았습니다. 이를 통해 'Next Token Generation'의 Task를 수행하는 원리에 대해 다시 한번 확인할 수 있었습니다. 내부적으로 상당히 복잡하기 때문에 한번에 이해하기는 쉽지 않지만 여러번 디버깅해보며 꽤 깊이 있게 알게 되었네요.
+오늘은 LLM들의 기초가 되는 Transformer의 특징을 알아보고 이를 Pytorch로 구현한 코드에 대해 자세히 리뷰해보았습니다. 이를 통해 'Next Token Generation'의 Task를 수행하는 원리에 대해 다시 한번 확인할 수 있었습니다.
 
-감사합니다.
+내부적으로 상당히 복잡하기 때문에 한번에 이해하기는 쉽지 않지만 여러번 디버깅해보며 꽤 깊이 있게 알게 되었네요. 감사합니다.
