@@ -22,6 +22,9 @@ toc: true
   <small>Source: <a href="https://kserve.github.io/website/latest/">https://kserve.github.io/website/latest/</a></small>
 </div>
 
+> 앞선 글
+- [[Kserve] 1.소개](https://min731.github.io/posts/Kserve-Introduction/)
+
 ## KServe 설치
 
 - KServe를 설치하기 위해서는 Knative, Istio, Cert Manager 등 여러 third-party 구성 요소를 먼저 구축해야 합니다.

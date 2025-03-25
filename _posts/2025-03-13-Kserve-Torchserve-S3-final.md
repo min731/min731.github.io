@@ -22,6 +22,10 @@ toc: true
   <small>Source: <a href="https://kserve.github.io/website/latest/">https://kserve.github.io/website/latest/</a></small>
 </div>
 
+> 앞선 글
+- [[Kserve] 1.소개](https://min731.github.io/posts/Kserve-Introduction/)
+- [[Kserve] 2. 설치 및 구축](https://min731.github.io/posts/Kserve-Installation/)
+
 ## Kserve TorchServe 런타임 배포
 
 [Kserve Docs 'Deploy a PyTorch Model with TorchServe InferenceService'](https://kserve.github.io/website/latest/modelserving/v1beta1/torchserve/) 내용을 토대로 진행합니다.
@@ -376,8 +380,8 @@ jmlim@Legion-5:~/model-example/mnist/pytorch$ curl -v -H "Host: mnist-torchserve
 
 이번 Kserve 시리즈를 통해 기술 소개부터 설치, 그리고 TorchServe 모델 배포까지 ML 모델 서빙 파이프라인의 전체 과정을 다뤘습니다. 작성된 내용과 같이 KServe는 Knative의 서버리스 기능과 다양한 ML 프레임워크 지원을 통해 AI 모델 배포를 간소화하는 기술입니다.
 
-실무에서 쿠버네티스 상의 AI 모델 서빙 구현을 위해 찾아보던 중 Kserve라는 기술을 알게 되어 깊이 공부하게 되었는데요. 국내에서는 KServe에 대해 참고할 만한 자료가 거의 없어 상당히 어려움을 겪었습니다. 
+Kserve는 최근 실무에서 쿠버네티스 환경에서 AI 모델 서빙을 구현하는 방법을 찾던 중 알게된 기술인데요. 국내에서는 참고할 만한 자료가 거의 없어, 구현 당시 상당히 어려움을 겪었습니다.
 
-그리하여 Kserve라는 기술에 대해 관심있는 분들에게 조금이나마 도움이 될까 싶어 실무에서 직접 부딪히고 해결한 경험을 토대로 정리해보았습니다. 이글 읽고 많은 분들에게 도움이 되었으면 좋겠습니다. 
+그리하여 이에 대해 관심있는 분들에게 조금이나마 도움이 될까 싶어 실무에서 직접 부딪히고 해결한 경험을 토대로 정리해보았습니다. 이글 읽고 많은 분들에게 도움이 되었으면 좋겠습니다. 
 
 읽어주셔서 감사합니다!
