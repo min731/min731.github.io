@@ -24,8 +24,7 @@ toc: true
 
 ## Kserve TorchServe 런타임 배포
 
-[Deploy a PyTorch Model with TorchServe InferenceService](https://kserve.github.io/website/latest/modelserving/v1beta1/torchserve/) 내용을 토대로 진행합니다.
-
+[Kserve Docs 'Deploy a PyTorch Model with TorchServe InferenceService'](https://kserve.github.io/website/latest/modelserving/v1beta1/torchserve/) 내용을 토대로 진행합니다.
 
 ### TorchServe란?
 
@@ -244,7 +243,7 @@ mnist-torchserve   http://mnist-torchserve.torchserve.svc.cluster.local   True  
 -rw-rw-r--  1 jmlim jmlim  272  3월 22 11:45 0.png
 ```
 
-**클러스터 / Istio 정보 확인**
+**(2) 클러스터 / Istio 정보 확인**
 
 ```bash
 (pytorch) jmlim@Legion-5:~/model-example/mnist/pytorch$ INGRESS_HOST=$(minikube -p mlops ip)
@@ -252,4 +251,102 @@ INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonp
 SERVICE_HOSTNAME=$(kubectl get inferenceservice mnist-torchserve -n torchserve -o jsonpath='{.status.url}' | cut -d "/" -f 3)
 echo "$INGRESS_HOST" "$INGRESS_PORT" "$SERVICE_HOSTNAME"
 192.168.49.2 30439 mnist-torchserve.torchserve.svc.cluster.local
+```
+
+```bash
+jmlim@Legion-5:~/model-example/mnist/pytorch$ k apply -f vs-torchserve.yaml
+virtualservice.networking.istio.io/mnist-torchserve-external created
+jmlim@Legion-5:~/model-example/mnist/pytorch$ curl -v -H "Content-Type: application/json" \
+  http://${INGRESS_HOST}:${INGRESS_PORT}/v1/models/mnist:predict \
+  -d @./mnist.json
+*   Trying 192.168.49.2:30439...
+* Connected to 192.168.49.2 (192.168.49.2) port 30439 (#0)
+> POST /v1/models/mnist:predict HTTP/1.1
+> Host: 192.168.49.2:30439
+> User-Agent: curl/7.81.0
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 411
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 404 Not Found
+< date: Sat, 22 Mar 2025 03:28:48 GMT
+< server: istio-envoy
+< connection: close
+< content-length: 0
+< 
+* Closing connection 0
+jmlim@Legion-5:~/model-example/mnist/pytorch$ k get gw knative-ingress-gateway -n knative-serving -o yaml
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.istio.io/v1beta1","kind":"Gateway","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"net-istio","app.kubernetes.io/name":"knative-serving","app.kubernetes.io/version":"1.17.0","networking.knative.dev/ingress-provider":"istio"},"name":"knative-ingress-gateway","namespace":"knative-serving"},"spec":{"selector":{"istio":"ingressgateway"},"servers":[{"hosts":["*"],"port":{"name":"http","number":80,"protocol":"HTTP"}}]}}
+  creationTimestamp: "2025-03-08T11:44:30Z"
+  generation: 1
+  labels:
+    app.kubernetes.io/component: net-istio
+    app.kubernetes.io/name: knative-serving
+    app.kubernetes.io/version: 1.17.0
+    networking.knative.dev/ingress-provider: istio
+  name: knative-ingress-gateway
+  namespace: knative-serving
+  resourceVersion: "162127"
+  uid: 99ea6518-3320-4621-bf8e-12377e006046
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - '*'
+    port:
+      name: http
+      number: 80
+      protocol: HTTP
+jmlim@Legion-5:~/model-example/mnist/pytorch$ k delete -f vs-torchserve.yaml
+virtualservice.networking.istio.io "mnist-torchserve-external" deleted
+jmlim@Legion-5:~/model-example/mnist/pytorch$ k apply -f vs-torchserve.yaml
+virtualservice.networking.istio.io/mnist-torchserve-external created
+jmlim@Legion-5:~/model-example/mnist/pytorch$ curl -v -H "Content-Type: application/json"   http://${INGRESS_HOST}:${INGRESS_PORT}/v1/models/mnist:predict   -d @./mnist.json
+*   Trying 192.168.49.2:30439...
+* Connected to 192.168.49.2 (192.168.49.2) port 30439 (#0)
+> POST /v1/models/mnist:predict HTTP/1.1
+> Host: 192.168.49.2:30439
+> User-Agent: curl/7.81.0
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 411
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 404 Not Found
+< date: Sat, 22 Mar 2025 03:31:01 GMT
+< server: istio-envoy
+< x-envoy-upstream-service-time: 2
+< content-length: 0
+< 
+* Connection #0 to host 192.168.49.2 left intact
+jmlim@Legion-5:~/model-example/mnist/pytorch$ curl -v -H "Host: mnist-torchserve-predictor.torchserve.svc.cluster.local" \
+  -H "Content-Type: application/json" \
+  http://${INGRESS_HOST}:${INGRESS_PORT}/v1/models/mnist:predict \
+  -d @./mnist.json
+*   Trying 192.168.49.2:30439...
+* Connected to 192.168.49.2 (192.168.49.2) port 30439 (#0)
+> POST /v1/models/mnist:predict HTTP/1.1
+> Host: mnist-torchserve-predictor.torchserve.svc.cluster.local
+> User-Agent: curl/7.81.0
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 411
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< content-length: 19
+< content-type: application/json
+< date: Sat, 22 Mar 2025 03:31:07 GMT
+< server: istio-envoy
+< x-envoy-upstream-service-time: 497
+< 
+* Connection #0 to host 192.168.49.2 left intact
+{"predictions":[0]}jmlim@Legion-5:~/model-example/mnist/pytorch$
 ```
