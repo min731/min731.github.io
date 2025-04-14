@@ -24,7 +24,7 @@ toc: true
 
 ## RoBERTa
 
-[RoBERTa: A Robustly Optimized BERT Pretraining Approach](https://arxiv.org/pdf/1907.11692) 내용을 **Claude 3.7 Sonnet**을 활용하여 자세히 살펴봅니다.
+[RoBERTa: A Robustly Optimized BERT Pretraining Approach](https://arxiv.org/pdf/1907.11692) 내용을 자세히 살펴봅니다.
 
 ### Abstract
 
