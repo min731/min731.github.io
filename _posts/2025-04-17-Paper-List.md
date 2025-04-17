@@ -10,7 +10,7 @@ date: 2025-04-17 18:30:00 +0900
 # categories: [MLOps | 인프라 개발, Kserve]
 categories: [Life | 일상 이야기, ETC]
 # categories: [STEM | 수학/통계, Statistics]
-tags: [Lenovo-Legion-5, RAM, SO-DIMM]
+tags: [Paper, Architecture, Lightweight]
 description: "읽을 논문을 정리합니다."
 # image: assets/img/posts/resize/output/Samsung-1GB-DDR2-Laptop-RAM.jpg # 대표 이미지  가로 세로 비율 약 1.91:1 (예: 1200×628px)
 math: true
@@ -18,15 +18,14 @@ toc: true
 # pin: true
 ---
 
-<div align="center">
-  <small>Source: <a href="https://commons.wikimedia.org/wiki/File:Samsung-1GB-DDR2-Laptop-RAM.jpg">https://commons.wikimedia.org/wiki/File:Samsung-1GB-DDR2-Laptop-RAM.jpg</a></small>
-</div>
-
 ### 논문 
 
 #### 아키텍쳐
 
+- [ALBERT: A Lite BERT for Self-supervised Learning of Language Representations](https://arxiv.org/abs/1909.11942)
+- [SimCSE: Simple Contrastive Learning of Sentence Embeddings](https://arxiv.org/abs/2104.08821)
+
 #### 경량화
 
-
+- [Distilling the Knowledge in a Neural Network](https://arxiv.org/abs/1503.02531)
 
