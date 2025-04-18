@@ -25,6 +25,10 @@ toc: true
 - [ALBERT: A Lite BERT for Self-supervised Learning of Language Representations](https://arxiv.org/abs/1909.11942)
 - [SimCSE: Simple Contrastive Learning of Sentence Embeddings](https://arxiv.org/abs/2104.08821)
 
+#### 임베딩
+
+- [RoFormer: Enhanced Transformer with Rotary Position Embedding](https://arxiv.org/abs/2104.09864)
+
 #### 경량화
 
 - [Distilling the Knowledge in a Neural Network](https://arxiv.org/abs/1503.02531)
