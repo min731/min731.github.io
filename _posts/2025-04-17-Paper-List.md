@@ -35,6 +35,10 @@ toc: true
 
 - [Unsupervised Dense Information Retrieval with Contrastive Learning](https://arxiv.org/abs/2112.09118)
 
+- [ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT](https://arxiv.org/abs/2004.12832)
+
+- [BGE M3-Embedding: Multi-Lingual, Multi-Functionality, Multi-Granularity Text Embeddings Through Self-Knowledge Distillation](https://arxiv.org/abs/2402.03216)
+
 #### 경량화
 
 - [Distilling the Knowledge in a Neural Network](https://arxiv.org/abs/1503.02531)
