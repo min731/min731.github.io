@@ -1,7 +1,7 @@
 import os
 import argparse
 from PIL import Image
-import cairosvg  # SVG를 PNG로 변환하기 위한 라이브러리
+# import cairosvg  # SVG를 PNG로 변환하기 위한 라이브러리
 
 def reshape_image(input_path, output_path, max_size=(1200, 628), target_ratio=1.91, bg_color=(255, 255, 255)):
     """
